@@ -10,7 +10,7 @@ export default {
         <label>Password:</label>
         <input type="password" v-model="password" class="form-control" required>
       </div>
-      <button class="btn btn-primary w-100" @click="loginUser">Login</button>
+      <button class="btn btn-primary w-100" @click="loginUser">Submit Details</button>
 
       <div v-if="errorMsg" class="alert alert-danger mt-3">
         {{ errorMsg }}

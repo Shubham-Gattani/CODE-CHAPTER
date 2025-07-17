@@ -1,0 +1,37 @@
+.active-tab {
+  background-color: #189ad3 !important;
+  color: white !important;
+  border-radius: 5px;
+}
+/* Hover effect for nav-link (excluding active-tab) */
+.nav-link:not(.active-tab):hover {
+  background-color: #e0f7fa; /* light cyan */
+  color: #000 !important;
+  border-radius: 5px;
+}
+
+/* Adding css for SPOC profile "Home" page */
+.nav-pills .nav-link {
+  background-color: #e6f4ea;
+  color: #333;
+  border-radius: 20px;
+  padding: 8px 20px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.nav-pills .nav-link.active {
+  background-color:  #001f4d !important;
+  color: white !important;
+}
+
+.nav-pills .nav-link:hover {
+  background-color: #c5d3ef;
+  color: #000;
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}

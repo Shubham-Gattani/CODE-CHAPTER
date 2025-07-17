@@ -5,7 +5,7 @@ from flask_security import auth_required, roles_required, roles_accepted, curren
 
 # IMPORTS FROM OTHER FILES
 from .database import db
-from .models_4 import User, SPOC
+from .models_4 import User, SPOC, Student
 
 # Once our backend is ready, we will try to connect to the frontend. Since we are using CDN, so we will need a starting point, this route will act as the starting point which will load index.html on which our Vue script will run.
 @app.route("/", methods=["GET"]) # This is the home page. It will have some images and a LOGIN BUTTON. Clicking on LOGIN, a login page/form should be shown with a SUBMIT button, which should send a POST to /api/login, and if the LOGIN is successful, we should be redirected to SPOC dashboard
@@ -59,9 +59,7 @@ def user_login():
 def get_college_details_for_spoc_dashboard():
     if current_user.role != "spoc":
         return jsonify({"error": "Unauthorized"}), 403
-    # spoc_id = current_user.spoc.id # (current_user.spoc) gives the 1-1 related SPOC object; and (current_user.spoc).id gives the required spoc_id
     spoc = current_user.spoc # (current_user.spoc) DIRECTLY gives the 1-1 related SPOC object
-    # spoc = SPOC.query.get(spoc_id)
     if not spoc:
         return jsonify({"error": "SPOC not found"}), 404
 
@@ -108,8 +106,8 @@ def get_mou_pdf():
     # if not spoc:
     #     return jsonify({"error": "SPOC not found"}), 404
 
-    filename = f"ID card 2025.pdf"
-    return jsonify({"path": f"/static/{filename}"}), 200
+    filename = "https://drive.google.com/file/d/1rrGrsGwCBQerBpRG8TH0wci1RdhB6muD/view?usp=drive_link"
+    return jsonify({"path": filename}), 200
 
 @app.get("/api/spoc_dashboard/request_letter")
 @auth_required("token")
@@ -118,9 +116,32 @@ def get_request_letter_pdf():
     # if not spoc:
     #     return jsonify({"error": "SPOC not found"}), 404
 
-    filename = f"ID card 2025.pdf"
-    return jsonify({"path": f"/static/{filename}"}), 200
+    # filename = f"ID card 2025.pdf"
+    # return jsonify({"path": f"/static/{filename}"}), 200
+    filename = "https://drive.google.com/file/d/1rrGrsGwCBQerBpRG8TH0wci1RdhB6muD/view?usp=drive_link"
+    return jsonify({"path": filename}), 200
 
+@app.get("/api/spoc_dashboard/student_details")
+@auth_required("token")
+def get_student_details_for_spoc_dashboard():
+    if current_user.role != "spoc":
+        return jsonify({"error": "Unauthorized"}), 403
+    
+    spoc = current_user.spoc
+    if not spoc or not spoc.college:
+        return jsonify({"error": "SPOC or College not found"}), 404
+    
+    students = Student.query.filter_by(college_id=spoc.college.id).all()
+    student_list = [
+        {
+            "id": s.id,
+            "name": s.name,
+            "personal_email": s.personal_email,
+            "contact_number": s.contact_number,
+            "college_id": s.college_id
+        } for s in students
+    ]
+    return jsonify({"students": student_list}), 200
 
 
 

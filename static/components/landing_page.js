@@ -10,7 +10,7 @@ export default {
       </button>
       <div class="d-flex flex-column align-items-center justify-content-center h-100">
         <img src="https://static.vecteezy.com/system/resources/previews/001/993/379/original/app-development-concept-illustration-free-vector.jpg" 
-             alt="IITM Logo" 
+             alt="Landing Page image" 
              style="max-width: 300px; margin-bottom: 30px;">
         <h1 class="mb-3">Welcome to CODE CHAPTER</h1>
         <p class="lead text-center" style="max-width: 500px;">
