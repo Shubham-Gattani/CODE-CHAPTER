@@ -45,20 +45,24 @@ export default {
         if (!res.ok) {
           this.errorMsg = data.message || "Login failed";
         } else {
-      // localStorage.setItem("auth_token", data.auth_token);
-      // localStorage.setItem("user_role", data.role);
+          // localStorage.setItem("auth_token", data.auth_token);
+          // localStorage.setItem("user_role", data.role);
 
-      if (data.role === "spoc") {
-        console.log("Login success:", data);
-        localStorage.setItem("user", JSON.stringify(data));
-        this.$router.push("/spoc_home"); // Go to SPOC dashboard IFF role is "spoc"
-      } else {
-        alert("Only SPOCs are allowed to login at this time");
-        setTimeout(() => {
-          this.$router.push("/");
-        }, 2000);
-      }
-    }
+          if (data.role === "spoc") {
+            console.log("Login success:", data);
+            localStorage.setItem("user", JSON.stringify(data));
+            
+            // Emit login event to parent component
+            this.$emit("login");
+            
+            this.$router.push("/spoc_home"); // Go to SPOC dashboard IFF role is "spoc"
+          } else {
+            alert("Only SPOCs are allowed to login at this time");
+            setTimeout(() => {
+              this.$router.push("/");
+            }, 2000);
+          }
+        }
 
       } catch (err) {
         console.error("Login Error:", err);

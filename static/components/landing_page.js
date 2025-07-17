@@ -1,11 +1,11 @@
 export default {
   template: `
     <div class="position-relative" style="height: 100vh; background: #f8f9fa;">
-      <button 
+      <!--<button 
         class="btn btn-primary position-absolute" 
         style="top: 30px; right: 40px; z-index: 10;"
         @click="$router.push('/login')"
-      >
+      >-->
         LOGIN
       </button>
       <div class="d-flex flex-column align-items-center justify-content-center h-100">

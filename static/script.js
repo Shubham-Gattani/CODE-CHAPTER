@@ -13,7 +13,7 @@ import landing_page from "./components/landing_page.js";
 
 // Define routes
 const routes = [
-    {path: "/", component: landing_page},
+    { path: "/", component: landing_page },
     { path: "/login", component: Login },
     { path: "/spoc_home", component: Home },
     { path: "/student-details", component: StudentDetails },
@@ -25,22 +25,44 @@ const routes = [
 
 // Create Vue Router instance
 const router = new VueRouter({
-  mode: "hash", // or "history" if backend supports it; # DID NOT UNDERSTAND THIS. 
-  routes
+    mode: "hash", // or "history" if backend supports it; # DID NOT UNDERSTAND THIS. 
+    routes
 });
 
 // Create main Vue instance
 const app = new Vue({
-  el: "#app",
-  router,
-  components: {
-    "nav-bar": Navbar,
-    "footer-component": Footer
-  },
-  template: `
+    el: "#app",
+    router,
+    components: {
+        "nav-bar": Navbar,
+        "footer-component": Footer
+    },
+    data: {
+        loggedIn: false
+    },
+    created() {
+        // Check if user is already logged in when app starts
+        this.checkLoginStatus();
+    },
+    methods: {
+        handleLogout() {
+            this.loggedIn = false
+        },
+        handleLogin() {
+            this.loggedIn = true
+        },
+        checkLoginStatus() {
+            // Check if user data exists in localStorage
+            const userData = localStorage.getItem("user");
+            if (userData) {
+                this.loggedIn = true;
+            }
+        }
+    },
+    template: `
     <div class="container">
-      <nav-bar></nav-bar>
-      <router-view></router-view>
+      <nav-bar :loggedIn = 'loggedIn' @logout="handleLogout"></nav-bar>
+      <router-view :loggedIn = 'loggedIn' @login="handleLogin"></router-view>
       <footer-component></footer-component>
     </div>
   `
