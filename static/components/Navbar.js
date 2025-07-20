@@ -50,7 +50,10 @@ export default {
           <router-link class="nav-link fw-bold text-dark" to="/schedule" active-class="active-tab">Schedule</router-link>
         </li>
         <li class="nav-item">
-          <a class="nav-link fw-bold text-dark" href="https://docs.google.com/document/d/1FeJwoJNSpzDjn4DP5NBDEJ4BIole3jnNy23FTlqRn4A" target="_blank" rel="noopener noreferrer">Announcements</a>
+          <router-link class="nav-link fw-bold text-dark" to="/announcements" active-class="active-tab">
+            Announcements
+          </router-link>
+
         </li>
         <li class="nav-item">
           <router-link class="nav-link fw-bold text-dark" to="/contact" active-class="active-tab">Contact Us</router-link>

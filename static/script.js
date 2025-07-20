@@ -7,7 +7,7 @@ import Login from "./components/Login.js";
 import Home from "./components/spoc_components/Home.js";
 import StudentDetails from "./components/spoc_components/StudentDetails.js";
 import Schedule from "./components/spoc_components/Schedule.js";
-// import Announcements from "./components/spoc_components/Announcements.js";
+import Announcements from "./components/spoc_components/Announcements.js";
 import Contact from "./components/spoc_components/Contact.js";
 import More from "./components/spoc_components/More.js";
 import landing_page from "./components/landing_page.js";
@@ -19,7 +19,7 @@ const routes = [
     { path: "/spoc_home", component: Home },
     { path: "/student-details", component: StudentDetails },
     { path: "/schedule", component: Schedule },
-    // { path: "/announcements", component: Announcements },
+    { path: "/announcements", component: Announcements },
     { path: "/contact", component: Contact },
     { path: "/more", component: More },
     { path: "*", redirect: "/spoc_home" }  // fallback to home
@@ -62,7 +62,7 @@ const app = new Vue({
         }
     },
     template: `
-    <div class="container" style="background-color: #d0daebda;">
+    <div class="container" style="background-color: #d0daebda">
       <nav-bar :loggedIn = 'loggedIn' @logout="handleLogout"></nav-bar>
       <router-view :loggedIn = 'loggedIn' @login="handleLogin"></router-view>
       <!--<footer-component style="background-color: darkgreen;"></footer-component>-->

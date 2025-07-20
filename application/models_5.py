@@ -237,7 +237,7 @@ class StudentMarks(db.Model):
         back_populates='marks'
     )
 
-# class StudentDashboard(db.Model): # INCASE NEEDED
+# class StudentDashboard(db.Model): # NOT NEEDED
 #     __tablename__ = 'student_dashboard'
     
 #     id = db.Column(db.Integer, primary_key=True)
