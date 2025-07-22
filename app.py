@@ -6,7 +6,7 @@ from flask_security import Security, SQLAlchemyUserDatastore, hash_password  # I
 
 # Imports from other code files
 from application.database import db  # Imports the database instance (usually SQLAlchemy)
-from application.models_4 import User, Role  # Imports User and Role models used for authentication
+from application.models_6 import User, Role  # Imports User and Role models used for authentication
 from application.config import LocalDevelopmentConfig  # Imports local development configuration settings
 # from application.resources import api
 
@@ -33,23 +33,27 @@ with app.app_context():  # Ensures the app context is available for database ope
     # THE MOMENT OUR APP STARTS RUNNING, FOLLOWING ENTRIES WILL ALWAYS BE PRESENT IN THE DATABASE. WE DON'T NEED TO MANUALLY DO ANYTHING.
     db.create_all()  # Creates all database tables defined in the models if they do not exist
     
-    app.security.datastore.find_or_create_role(name='admin', description='Superuser of app') # "find_or_create_role" checks if the role exists, and if not, creates it 
-    app.security.datastore.find_or_create_role(name='user', description='General user of the app') 
+    app.security.datastore.find_or_create_role(name='admin', description='Has access to all details') # "find_or_create_role" checks if the role exists, and if not, creates it 
+    app.security.datastore.find_or_create_role(name='spoc', description='Single point of contact') 
     db.session.commit()  # Commits the changes to the database, ensuring roles are saved. WE CANNOT EXECUTE THE BELOW LINES BEFORE THE THIS FIRST COMMIT.
 
-    if not app.security.datastore.find_user(email="user0@admin.com"): 
+    if not app.security.datastore.find_user(email="21f3002082@ds.study.iitm.ac.in"): 
         app.security.datastore.create_user( 
-            email="user0@admin.com",
-            # username = "admin01",
+            email="21f3002082@ds.study.iitm.ac.in",
+            password = hash_password("1234"),
+            role = "spoc"
+        )
+    if not app.security.datastore.find_user(email="shubham29.gattani@gmail.com"): 
+        app.security.datastore.create_user( 
+            email="shubham29.gattani@gmail.com",
+            password = hash_password("1234"),
+            role = "spoc"
+        )
+    if not app.security.datastore.find_user(email="shubham29.iitd@gmail.com"):
+        app.security.datastore.create_user( 
+            email="shubham29.iitd@gmail.com",
             password = hash_password("1234"),
             role = "admin"
-        ) 
-    if not app.security.datastore.find_user(email="user1@user.com"):
-        app.security.datastore.create_user( 
-            email="user1@user.com",
-            # username = "user01",
-            password = hash_password("1234"),
-            role = "user"
         ) 
     db.session.commit()
 

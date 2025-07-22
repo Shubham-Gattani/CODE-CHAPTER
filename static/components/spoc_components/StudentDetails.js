@@ -4,14 +4,17 @@ export default {
       <h4>STUDENT DETAILS</h4>
       <div v-if="errorMsg" class="alert alert-danger">{{ errorMsg }}</div>
       <div v-else-if="students.length">
-        <table class="table table-striped table-bordered">
+        <table class="table table-bordered table-hover table-sm">
           <thead class="thead-dark">
             <tr>
               <th scope="col">#</th>
               <th scope="col">Name</th>
               <th scope="col">Personal Email</th>
               <th scope="col">Contact Number</th>
-              <th scope="col">College ID</th>
+              <th scope="col">Date of Birth</th>
+              <th scope="col">College Name</th>
+              <th scope="col">Profile Photo</th>
+              <th scope="col">ID Card</th>
             </tr>
           </thead>
           <tbody>
@@ -20,7 +23,16 @@ export default {
               <td>{{ student.name }}</td>
               <td>{{ student.personal_email }}</td>
               <td>{{ student.contact_number || 'N/A' }}</td>
-              <td>{{ student.college_id }}</td>
+              <td>{{ student.dob || 'N/A' }}</td>
+              <td>{{ student.college_name || 'N/A' }}</td>
+              <td>
+                <img :src="student.profile_photo" alt="Profile" v-if="student.profile_photo" width="50" height="50"/>
+                <span v-else>N/A</span>
+              </td>
+              <td>
+                <img :src="student.id_card" alt="ID Card" v-if="student.id_card" width="50" height="50"/>
+                <span v-else>N/A</span>
+              </td>
             </tr>
           </tbody>
         </table>

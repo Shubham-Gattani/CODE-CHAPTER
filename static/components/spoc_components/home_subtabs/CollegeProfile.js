@@ -4,12 +4,13 @@ export default {
       <h4>COLLEGE PROFILE</h4>
       <div v-if="errorMsg" class="alert alert-danger">{{ errorMsg }}</div>
       <div v-else-if="college">
-        <p><strong>College Name:</strong> {{ college.name }}</p>
-        <p><strong>Address:</strong> {{ college.address }}</p>
+        <p><strong>College Name:</strong> {{ college.college_name }}</p>
+        <p><strong>Address:</strong> {{ college.addr1 }}</p>
         <p><strong>City:</strong> {{ college.city }}</p>
         <p><strong>State:</strong> {{ college.state }}</p>
         <p><strong>PIN CODE:</strong> {{ college.pincode }}</p>
-        <p><strong>ID:</strong> {{ college.id }}</p>
+        <p><strong>College Link:</strong> {{ college.college_link }}</p>
+        <p><strong>University:</strong> {{ college.university }}</p>
       </div>
       <div v-else>
         <p>Loading college details...</p>

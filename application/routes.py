@@ -5,7 +5,7 @@ from flask_security import auth_required, roles_required, roles_accepted, curren
 
 # IMPORTS FROM OTHER FILES
 from .database import db
-from .models_4 import User, SPOC, Student
+from .models_6 import User, SpocDetails, Student
 
 # Once our backend is ready, we will try to connect to the frontend. Since we are using CDN, so we will need a starting point, this route will act as the starting point which will load index.html on which our Vue script will run.
 @app.route("/", methods=["GET"]) # This is the home page. It will have some images and a LOGIN BUTTON. Clicking on LOGIN, a login page/form should be shown with a SUBMIT button, which should send a POST to /api/login, and if the LOGIN is successful, we should be redirected to SPOC dashboard
@@ -67,13 +67,30 @@ def get_college_details_for_spoc_dashboard():
     college = spoc.college
     if college:
         return jsonify({
-            "id": college.id,
-            "name": college.name,
-            "address": college.address,
+            "cc_id": college.cc_id,
+            "college_name": college.college_name,
+            "logo_path": college.logo_path,
+            "addr1": college.addr1,
+            "aicte_approved": college.aicte_approved,
             "city": college.city,
-            "state": college.state,
-            "pincode": college.pincode
+            "pincode": college.pincode,
+            "college_link": college.college_link,
+            "university": college.university,
+            "mobile_no1": college.mobile_no1,
+            "mobile_no2": college.mobile_no2,
+            "partnering_since": college.partnering_since,
+            "updated_at": college.updated_at,
+            "is_active": college.is_active,
+            "state": college.stateName,
+            "country": college.country,
+            "instituteType": college.instituteType,
+            "timestamp": college.timestamp,
+            "updated_by": college.updated_by,
+            "changes": college.changes,
+            "mou_cloud_link": college.mou_cloud_link,
+            "mou_grive_link": college.mou_grive_link
         }), 200
+
     else:
         return jsonify({"error": "College not found"}), 404
 
@@ -88,14 +105,25 @@ def get_spoc_details_for_spoc_dashboard():
 
     # SPOC details
     spoc_data = {
-        "name": spoc.name,
-        "personal_email": spoc.personal_email,
-        "designation": spoc.designation,
-        "contact_number": spoc.contact_number,
+        "id": spoc.id,
         "user_id": spoc.user_id,
-        "college_name": spoc.college.name,
-        "user_email": spoc.user.email if spoc.user else None
-    }
+        "spoc_name": spoc.spocName,
+        "spoc_emailid": spoc.spoc_emailid,
+        "principal_name": spoc.principal_name,
+        "principal_email": spoc.principal_email,
+        "principal_mobile": spoc.principal_mobile,
+        "designation": spoc.designation,
+        "department": spoc.department,
+        "mobile_number_1": spoc.mobileNumber,
+        "mobile_number_2": spoc.mobileNumber2,
+        "profile_photo": spoc.profile_photo,
+        "updated_at": spoc.updated_at,
+        "college_id": spoc.cc_id,
+        "college_name": spoc.college.college_name if spoc.college else None,
+        "status": spoc.status,
+        "spoc_onboard": spoc.spoc_onboard
+        }
+
 
     return jsonify(spoc_data), 200
 
@@ -109,17 +137,6 @@ def get_mou_pdf():
     filename = "https://drive.google.com/file/d/1rrGrsGwCBQerBpRG8TH0wci1RdhB6muD/view?usp=drive_link"
     return jsonify({"path": filename}), 200
 
-@app.get("/api/spoc_dashboard/request_letter")
-@auth_required("token")
-def get_request_letter_pdf():
-    # spoc = current_user.spoc # TODO: MoU is a feature of college and not the SPOC. We will change this later.
-    # if not spoc:
-    #     return jsonify({"error": "SPOC not found"}), 404
-
-    # filename = f"ID card 2025.pdf"
-    # return jsonify({"path": f"/static/{filename}"}), 200
-    filename = "https://drive.google.com/file/d/1rrGrsGwCBQerBpRG8TH0wci1RdhB6muD/view?usp=drive_link"
-    return jsonify({"path": filename}), 200
 
 @app.get("/api/spoc_dashboard/student_details")
 @auth_required("token")
@@ -135,10 +152,15 @@ def get_student_details_for_spoc_dashboard():
     student_list = [
         {
             "id": s.id,
+            "college_id": s.college_id,
+            "college_name": s.college.college_name if s.college else None,
             "name": s.name,
             "personal_email": s.personal_email,
             "contact_number": s.contact_number,
-            "college_id": s.college_id
+            "dob": s.dob,
+            "profile_photo": s.profile_photo,
+            "signature": s.signature,
+            "id_card": s.id_card
         } for s in students
     ]
     return jsonify({"students": student_list}), 200
