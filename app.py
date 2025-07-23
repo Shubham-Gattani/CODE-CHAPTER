@@ -1,5 +1,6 @@
 from flask import Flask  # Imports the Flask class to create the app instance
 from flask_security import Security, SQLAlchemyUserDatastore, hash_password  # Imports Flask-Security classes for user auth and role-based access control
+from flask_mail import Mail, Message
 # from flask_security.datastore import SQLAlchemyUserDatastore 
 # from flask_security.utils import hash_password  # Imports Flask-Security classes for user auth and role-based access control
 # from werkzeug.security import generate_password_hash
@@ -15,7 +16,9 @@ def create_app():
     app = Flask(__name__)  # Creates the Flask app instance
     app.config.from_object(LocalDevelopmentConfig)  # Applies the local development configuration to the app. But we may need to change this to ProductionConfig when we deploy the app.
     db.init_app(app)  # Initializes the database extension with the app
-    # api.init_app(app)
+    mail = Mail(app)  # Initialize Flask-Mail with the app
+    app.mail = mail   # Optionally attach to app for easy access
+    
     # Creates a user datastore linking the database with the User and Role models
     datastore = SQLAlchemyUserDatastore(db, User, Role) # Also, the datastore is used to pre-fill the values like fs_uniquifier, active. We won't manually set these values. 
 

@@ -2,6 +2,12 @@
 class Config:
     DEBUG = False # When True: You get detailed error messages in the browser. In production: Set to False to avoid exposing errors to users.
     SQLALCHEMY_TRACK_MODIFICATIONS = True # Enables tracking of object changes in SQLAlchemy. Note: It's not needed unless you’re using signals. Set to False to save memory and avoid warnings.
+    MAIL_SERVER = 'smtp.gmail.com'
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = '21f3002082@ds.study.iitm.ac.in'
+    MAIL_PASSWORD = 'ywaz mofw kjpc yfhm'
+    MAIL_DEFAULT_SENDER = '21f3002082@ds.study.iitm.ac.in'
 
 class LocalDevelopmentConfig(Config):
     SQLALCHEMY_DATABASE_URI = 'sqlite:///lmsv2.sqlite3' # Tells Flask the location of the database. Here: It's using a local SQLite database file named lmsv2.sqlite3.

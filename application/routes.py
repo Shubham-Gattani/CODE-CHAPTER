@@ -1,11 +1,14 @@
 # This file will contain the routes of our application, that we may or may not use in our application.
 
+import random
+from datetime import datetime, timedelta
+from flask_mail import Message
 from flask import current_app as app, jsonify, request, render_template
 from flask_security import auth_required, roles_required, roles_accepted, current_user, login_user, hash_password, verify_password
 
 # IMPORTS FROM OTHER FILES
 from .database import db
-from .models_6 import User, SpocDetails, Student
+from .models_6 import User, SpocDetails, Student, OTP
 
 # Once our backend is ready, we will try to connect to the frontend. Since we are using CDN, so we will need a starting point, this route will act as the starting point which will load index.html on which our Vue script will run.
 @app.route("/", methods=["GET"]) # This is the home page. It will have some images and a LOGIN BUTTON. Clicking on LOGIN, a login page/form should be shown with a SUBMIT button, which should send a POST to /api/login, and if the LOGIN is successful, we should be redirected to SPOC dashboard
@@ -165,7 +168,53 @@ def get_student_details_for_spoc_dashboard():
     ]
     return jsonify({"students": student_list}), 200
 
+@app.route('/api/send_otp', methods=['POST'])
+def send_otp():
+    data = request.get_json()
+    email = data.get('email')
+    if not email:
+        return jsonify({"message": "Email is required"}), 400
 
+    user = app.security.datastore.find_user(email=email)
+    if not user:
+        return jsonify({"message": "User not found"}), 404
+
+    otp_code = str(random.randint(100000, 999999))
+    expires_at = datetime.utcnow() + timedelta(minutes=10)
+
+    # Save OTP to DB
+    otp_entry = OTP(email=email, otp=otp_code, expires_at=expires_at)
+    db.session.add(otp_entry)
+    db.session.commit()
+
+    # Send OTP via email
+    msg = Message("Your OTP Code", recipients=[email])
+    msg.body = f"Your OTP code is: {otp_code}"
+    app.mail.send(msg)
+
+    return jsonify({"message": "OTP sent"}), 200
+
+@app.route('/api/verify_otp', methods=['POST'])
+def verify_otp():
+    data = request.get_json()
+    email = data.get('email')
+    otp_code = data.get('otp')
+
+    otp_entry = OTP.query.filter_by(email=email, otp=otp_code).order_by(OTP.created_at.desc()).first()
+    if not otp_entry or otp_entry.expires_at < datetime.utcnow():
+        return jsonify({"message": "Invalid or expired OTP"}), 400
+
+    # Optionally, delete OTP after use
+    db.session.delete(otp_entry)
+    db.session.commit()
+
+    user = app.security.datastore.find_user(email=email)
+    login_user(user)
+    return jsonify({
+        "id": user.id,
+        "role": user.role,
+        "auth_token": user.get_auth_token(),
+    }), 200
 
 
 

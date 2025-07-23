@@ -12,7 +12,7 @@ If you need to store dashboard-specific data, create a StudentActivityLog table.
 """
 # This file will have the database models that we will use in our application.
 from flask_security.core import UserMixin, RoleMixin
-from datetime import datetime
+from datetime import datetime, timedelta
 import uuid
 
 # Imports from other files
@@ -169,12 +169,12 @@ class Student(db.Model):
     college_id = db.Column(db.Integer, db.ForeignKey('college_details.id'), nullable=False)
     name = db.Column(db.String(100), nullable=False)
     personal_email = db.Column(db.String(255), unique=True, nullable=False)  # FIXED: Made non-nullable since it's used as FK target
-    contact_number = db.Column(db.String(15), unique=True, nullable=True)
+    contact_number = db.Column(db.String(15), unique=True, nullable=True) # HIDE IN UI
     dob = db.Column(db.String(50), nullable=True)  # Date of Birth
     profile_photo = db.Column(db.String(100), nullable=True)  # Path to the profile photo
     signature = db.Column(db.String(100), nullable=True)  # Path to the signature image
     id_card = db.Column(db.String(100), nullable=True)  # Path to the ID card image, for confirming the full name with id card
-
+    # user_type; ask Mallika mam
     # RELATIONSHIPS
     college = db.relationship('CollegeDetails', back_populates='students')
     faculty = db.relationship("Faculty", back_populates="student", uselist=False)  # Note that a very few of these rows will be connected to a faculty.
@@ -246,3 +246,10 @@ class StudentMarks(db.Model):
         'StudentCourse',
         back_populates='marks'
     )
+
+class OTP(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), nullable=False)
+    otp = db.Column(db.String(6), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.now)
+    expires_at = db.Column(db.DateTime, nullable=False)
